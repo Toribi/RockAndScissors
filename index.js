@@ -16,6 +16,7 @@ const wss = new WebSocket.Server({ server });
 let players = [];
 
 wss.on('connection', (ws) => {
+  console.log('New WebSocket connection');
   if (players.length < 2) {
     players.push(ws);
 
@@ -25,10 +26,12 @@ wss.on('connection', (ws) => {
 
     ws.on('message', (message) => {
       let data = JSON.parse(message);
+      console.log('Received move: ', data.move);
       handleMove(ws, data.move);
     });
 
     ws.on('close', () => {
+      console.log('WebSocket connection closed');
       players = players.filter(player => player !== ws);
     });
   } else {
