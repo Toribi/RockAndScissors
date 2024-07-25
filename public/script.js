@@ -1,7 +1,5 @@
-// Declara e inicializa a variável socket
 let socket;
 
-// Função para configurar a conexão WebSocket
 function setupWebSocket() {
     socket = new WebSocket('ws://' + window.location.host + ':10000');
 
@@ -18,12 +16,20 @@ function setupWebSocket() {
         console.log('Message from server: ', data);
         document.getElementById('result').innerText = data.result;
     };
+
+    socket.onclose = function(event) {
+        console.log('WebSocket connection closed.');
+    };
 }
 
-// Função para enviar a jogada
 function makeMove(move) {
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
-        console.error('WebSocket is not open.');
+    if (!socket) {
+        console.error('WebSocket is not initialized.');
+        return;
+    }
+
+    if (socket.readyState !== WebSocket.OPEN) {
+        console.error('WebSocket is not open. ReadyState: ' + socket.readyState);
         return;
     }
 
@@ -34,7 +40,6 @@ function makeMove(move) {
     socket.send(JSON.stringify(message));
 }
 
-// Configura a conexão WebSocket ao carregar a página
 window.onload = function() {
     setupWebSocket();
 };
