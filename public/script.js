@@ -1,7 +1,7 @@
 let socket;
 
 function setupWebSocket() {
-    socket = new WebSocket('ws://' + window.location.host + ':10000');
+    socket = new WebSocket('ws://' + window.location.hostname + ':10000');
 
     socket.onopen = function(event) {
         console.log('WebSocket connection opened.');
